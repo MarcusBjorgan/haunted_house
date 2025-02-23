@@ -38,7 +38,7 @@ def draw_maze(screen, maze, camera_x, camera_y):
     for y in range(MAZE_HEIGHT):
         for x in range(MAZE_WIDTH):
             if maze[y][x] == 1:
-                pygame.draw.rect(screen, WHITE, 
+                pygame.draw.rect(screen, WALL_COLOR, 
                     (x * CELL_SIZE - camera_x, y * CELL_SIZE - camera_y, CELL_SIZE, CELL_SIZE))
             elif maze[y][x] == 2:
                 pygame.draw.rect(screen, RED, 
