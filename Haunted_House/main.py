@@ -18,9 +18,10 @@ def main():
     pygame.display.set_caption("Maze Game")
     
     clock = pygame.time.Clock()
-    maze = create_maze()
+    maze, key_position = create_maze()
     player = Player()
     npc = NPC() 
+    has_key = False
     running = True
     won = False
     
@@ -47,6 +48,20 @@ def main():
 
         npc.move_towards_player(player, maze)
 
+        # **Sjekk om spilleren plukker opp nøkkelen**
+        """
+        if (player.x, player.y) == key_position:
+            has_key = True
+            key_position = None  # Fjern nøkkelen
+        """
+        if key_position:
+            key_x, key_y = key_position
+            distance = math.sqrt((player.x - key_x) ** 2 + (player.y - key_y) ** 2)
+            
+            if distance <= KEY_PICKUP_RADIUS:
+                has_key = True
+                key_position = None  # Remove key from the map
+
         # Check if the NPC and player are at the same position
         distance = math.sqrt((player.x - npc.x) ** 2 + (player.y - npc.y) ** 2)
         if distance < NPC_HITBOX_RADIUS:
@@ -65,6 +80,22 @@ def main():
         player.draw(virtual_screen, camera_x, camera_y)
         npc.draw(virtual_screen, camera_x, camera_y)
 
+        if key_position:
+            pygame.draw.circle(
+                virtual_screen, (255, 215, 0),  # Gullfarget nøkkel
+                (key_position[0] * CELL_SIZE - camera_x + CELL_SIZE // 2,
+                key_position[1] * CELL_SIZE - camera_y + CELL_SIZE // 2),
+                CELL_SIZE // 2
+            )
+        
+        if maze[player.y][player.x] == 2:
+            if has_key:
+                won = True
+                running = False
+            else:
+                print("Du trenger nøkkelen for å vinne!")  # Kan erstattes med en GUI-melding
+
+
 
         scaled_surface = pygame.transform.scale(virtual_screen, (SCREEN_WIDTH, SCREEN_HEIGHT))
         screen.blit(scaled_surface, (0, 0))
@@ -72,9 +103,9 @@ def main():
         pygame.display.flip()
         clock.tick(30)
  
-        if maze[player.y][player.x] == 2:
-            won = True
-            running = False
+        if maze[player.y][player.x] == 2 and has_key:
+                won = True
+                running = False
 
         pygame.display.flip()
         clock.tick(30)
