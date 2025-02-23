@@ -6,12 +6,17 @@ class Player:
         self.x = 20
         self.y = 20
         self.diameter = CELL_SIZE
+        
 
     def move(self, dx, dy, maze):
         new_x = self.x + dx 
         new_y = self.y + dy 
 
-        if 0 <= new_x < MAZE_WIDTH - self.diameter/4 and 0 <= new_y < MAZE_HEIGHT - self.diameter/4 and maze[new_y][new_x] != 1:
+        if (
+            0 <= new_x < MAZE_WIDTH - self.diameter // CELL_SIZE and
+            0 <= new_y < MAZE_HEIGHT - self.diameter // CELL_SIZE and
+            maze[int(new_y)][int(new_x)] != 1  
+        ):
             self.x = new_x
             self.y = new_y
 
