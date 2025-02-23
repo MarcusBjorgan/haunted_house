@@ -32,7 +32,17 @@ def create_maze():
 
     # Set endpoint
     maze[MAZE_HEIGHT - 10][MAZE_WIDTH - 10] = 2
-    return maze
+
+    # **Plasser nøkkel på et tilfeldig sted (ikke en vegg)**
+    while True:
+        key_x = random.randint(1, MAZE_WIDTH - 2)
+        key_y = random.randint(1, MAZE_HEIGHT - 2)
+        if maze[key_y][key_x] == 0:  # Sjekk at det ikke er en vegg
+            maze[key_y][key_x] = 3  # 3 = nøkkel
+            break
+
+
+    return maze, (key_x, key_y)
 
 def draw_maze(screen, maze, camera_x, camera_y):
     for y in range(MAZE_HEIGHT):
