@@ -6,9 +6,14 @@ class NPC:
     def __init__(self, start_x, start_y):
         self.x = start_x  
         self.y = start_y
-        self.diameter = CELL_SIZE
+        self.diameter = CELL_SIZE*3
         self.path = []  # Liste som lagrer veien NPC-en skal følge
         self.frame_counter = 0  # Teller hvor mange frames som har gått
+
+        # Load and scale the image
+        self.image = pygame.image.load("Haunted_House/Assets/eye.png").convert_alpha()
+        self.image = pygame.transform.scale(self.image, (CELL_SIZE*3, CELL_SIZE*3))
+
 
     def find_path(self, player, maze):
         """Bruker A* algoritme for å finne den korteste veien til spilleren, inkludert diagonale bevegelser."""
@@ -46,7 +51,7 @@ class NPC:
         self.frame_counter += 1
         self.speed = speed
 
-        if self.frame_counter % 20 == 0 or not self.path:
+        if self.frame_counter % 10 == 0 or not self.path:
             self.find_path(player, maze)  # Oppdaterer stien hver 20. frame
 
 
@@ -56,10 +61,16 @@ class NPC:
 
     def draw(self, screen, camera_x, camera_y):
         """Tegner NPC-en på skjermen."""
+        """
         pygame.draw.circle(
             screen,
             GRAY,
             (int(self.x * CELL_SIZE - camera_x + self.diameter), 
              int(self.y * CELL_SIZE - camera_y + self.diameter)),
             self.diameter
+        )
+        """
+        screen.blit(
+            self.image, 
+            (int(self.x * CELL_SIZE - camera_x), int(self.y * CELL_SIZE - camera_y))
         )
