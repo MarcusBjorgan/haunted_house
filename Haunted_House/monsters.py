@@ -3,9 +3,9 @@ import pygame
 import heapq  # Brukes for A*-algoritmen 
 
 class NPC:
-    def __init__(self):
-        self.x = MAZE_WIDTH - 20  # Starter NPC-en på motsatt side av spilleren
-        self.y = MAZE_HEIGHT - 20
+    def __init__(self, start_x, start_y):
+        self.x = start_x  
+        self.y = start_y
         self.diameter = CELL_SIZE
         self.path = []  # Liste som lagrer veien NPC-en skal følge
         self.frame_counter = 0  # Teller hvor mange frames som har gått
@@ -41,18 +41,18 @@ class NPC:
                     new_cost = cost + (1.4 if abs(nx - x) == 1 and abs(ny - y) == 1 else 1)  # Diagonal bevegelse koster litt mer
                     heapq.heappush(open_set, (new_cost, nx, ny, path + [(nx, ny)]))
 
-    def move_towards_player(self, player, maze):
+    def move_towards_player(self, player, maze, speed):
         """Beveger NPC-en mot spilleren basert på A*-stien."""
         self.frame_counter += 1
+        self.speed = speed
 
-        if self.frame_counter % 10 == 0 or not self.path:
-            self.find_path(player, maze)  # Oppdaterer stien hver 10. frame
+        if self.frame_counter % 20 == 0 or not self.path:
+            self.find_path(player, maze)  # Oppdaterer stien hver 20. frame
 
-        if self.path and len(self.path) > 1:
-            steps_to_move = min(1, len(self.path))
-            for _ in range(steps_to_move):
-                next_x, next_y = self.path.pop(0)
-                self.x, self.y = next_x, next_y  # Oppdaterer NPC-posisjonen
+
+        if self.path and self.frame_counter % self.speed == 0:  # Beveger seg kun hver 5. frame
+            next_x, next_y = self.path.pop(0)
+            self.x, self.y = next_x, next_y  # Oppdaterer NPC-posisjonen
 
     def draw(self, screen, camera_x, camera_y):
         """Tegner NPC-en på skjermen."""
