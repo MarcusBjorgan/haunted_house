@@ -3,12 +3,14 @@ import math
 from constants import *
 
 pygame.init()
+pygame.mixer.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 from maze import *
 from karl import *
 from monsters import *
 from bilder import *
+from sound import *
 
 bg_image = pygame.transform.scale(bg_image, (MAZE_WIDTH * CELL_SIZE, MAZE_HEIGHT * CELL_SIZE))  
 
@@ -17,16 +19,10 @@ def draw_light_effect(screen, player, camera_x, camera_y):
     darkness = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)  # Transparent surface
 
     # Light properties
-    light_radius = 300  # Change this to adjust vision range
+    light_radius = 120  # Change this to adjust vision range
 
     light_center_x = player.x * CELL_SIZE - camera_x + CELL_SIZE // 2
     light_center_y = player.y * CELL_SIZE - camera_y + CELL_SIZE // 2
-
-    #light_center_x = VIRTUAL_WIDTH / 2
-    #light_center_y = VIRTUAL_HEIGHT / 2
-
-    #light_center_x = (player.x * CELL_SIZE - camera_x) * (SCREEN_WIDTH / VIRTUAL_WIDTH) + CELL_SIZE // 2
-    #light_center_y = (player.y * CELL_SIZE - camera_y) * (SCREEN_HEIGHT / VIRTUAL_HEIGHT) + CELL_SIZE // 2
 
     darkness.fill((0, 0, 0, 0))
 
@@ -56,6 +52,8 @@ def main():
     won = False
 
     virtual_screen = pygame.Surface((VIRTUAL_WIDTH, VIRTUAL_HEIGHT))
+
+    pygame.mixer.music.play(-1)
 
     while running:
         for event in pygame.event.get():
@@ -90,6 +88,9 @@ def main():
         distance2 = math.sqrt((player.x - npc_2.x) ** 2 + (player.y - npc_2.y) ** 2)
         if distance1 < NPC_HITBOX_RADIUS or distance2 < NPC_HITBOX_RADIUS:
             running = False
+
+        if distance1 < 20 or distance2 < 20:
+            eye_sound.play()
 
         # Camera follows player
         camera_x = max(0, min(player.x * CELL_SIZE - VIRTUAL_WIDTH // 2, MAZE_WIDTH * CELL_SIZE - VIRTUAL_WIDTH))
