@@ -14,22 +14,33 @@ bg_image = pygame.transform.scale(bg_image, (MAZE_WIDTH * CELL_SIZE, MAZE_HEIGHT
 
 
 def draw_light_effect(screen, player, camera_x, camera_y):
-    """ Creates a circular light effect centered on the player """
-    darkness = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
-    darkness.fill((0, 0, 0, 250))  # Fully black overlay
+    darkness = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)  # Transparent surface
 
     # Light properties
     light_radius = 300  # Change this to adjust vision range
-    light_center_x = (player.x * CELL_SIZE - camera_x) * (SCREEN_WIDTH / VIRTUAL_WIDTH) + CELL_SIZE // 2
-    light_center_y = (player.y * CELL_SIZE - camera_y) * (SCREEN_HEIGHT / VIRTUAL_HEIGHT) + CELL_SIZE // 2
 
-    # Draw smooth fading light effect
+    light_center_x = player.x * CELL_SIZE - camera_x + CELL_SIZE // 2
+    light_center_y = player.y * CELL_SIZE - camera_y + CELL_SIZE // 2
+
+    #light_center_x = VIRTUAL_WIDTH / 2
+    #light_center_y = VIRTUAL_HEIGHT / 2
+
+    #light_center_x = (player.x * CELL_SIZE - camera_x) * (SCREEN_WIDTH / VIRTUAL_WIDTH) + CELL_SIZE // 2
+    #light_center_y = (player.y * CELL_SIZE - camera_y) * (SCREEN_HEIGHT / VIRTUAL_HEIGHT) + CELL_SIZE // 2
+
+    darkness.fill((0, 0, 0, 0))
+
+    # Darken entire screen
+    pygame.draw.rect(darkness, (0, 0, 0, 250), (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
+
+    # Create fading light effect
     for i in range(light_radius, 0, -10):  
         alpha = max(0, 255 - (light_radius - i) * 2)  # Creates a fade effect
         pygame.draw.circle(darkness, (0, 0, 0, alpha), (light_center_x, light_center_y), i)
 
-    # Apply the darkness effect on top of everything
+    # Apply the darkness effect **on top of everything**
     screen.blit(darkness, (0, 0))
+
 
 def main():
     font = pygame.font.SysFont(None, 36)
@@ -49,8 +60,6 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-
-        screen.blit(bg_image, (0, 0))
 
         keys = pygame.key.get_pressed()
 
@@ -83,6 +92,10 @@ def main():
         camera_x = max(0, min(player.x * CELL_SIZE - VIRTUAL_WIDTH // 2, MAZE_WIDTH * CELL_SIZE - VIRTUAL_WIDTH))
         camera_y = max(0, min(player.y * CELL_SIZE - VIRTUAL_HEIGHT // 2, MAZE_HEIGHT * CELL_SIZE - VIRTUAL_HEIGHT))
 
+        # Scale virtual screen to fit the main screen
+        scaled_surface = pygame.transform.scale(virtual_screen, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        screen.blit(scaled_surface, (0, 0))
+
         # Draw everything on the virtual screen
         virtual_screen.blit(bg_image, (-camera_x, -camera_y))
         draw_maze(virtual_screen, maze, camera_x, camera_y)
@@ -106,12 +119,8 @@ def main():
             else:
                 print("You need the key to escape!")  # Could be replaced with a GUI message
 
-        # Scale virtual screen to fit the main screen
-        scaled_surface = pygame.transform.scale(virtual_screen, (SCREEN_WIDTH, SCREEN_HEIGHT))
-        screen.blit(scaled_surface, (0, 0))
-
         # Apply the darkness effect **LAST**
-        draw_light_effect(screen, player, camera_x, camera_y)
+        draw_light_effect(virtual_screen, player, camera_x, camera_y)
 
         pygame.display.flip()
         clock.tick(30)
