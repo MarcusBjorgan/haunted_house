@@ -49,7 +49,8 @@ def main():
     clock = pygame.time.Clock()
     maze, key_position = create_maze()
     player = Player()
-    npc = NPC()
+    npc_1 = NPC(MAZE_WIDTH-20, MAZE_HEIGHT-20)
+    npc_2 = NPC(MAZE_WIDTH-20, MAZE_HEIGHT-40)
     has_key = False
     running = True
     won = False
@@ -64,15 +65,16 @@ def main():
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_UP]:
-            player.move(0, -2, maze)
+            player.move(0, -1, maze)
         if keys[pygame.K_DOWN]:
-            player.move(0, 2, maze)
+            player.move(0, 1, maze)
         if keys[pygame.K_LEFT]:
-            player.move(-2, 0, maze)
+            player.move(-1, 0, maze)
         if keys[pygame.K_RIGHT]:
-            player.move(2, 0, maze)
+            player.move(1, 0, maze)
 
-        npc.move_towards_player(player, maze)
+        npc_1.move_towards_player(player, maze, 2)
+        npc_2.move_towards_player(player, maze, 3)
 
         # Check if the player picks up the key
         if key_position:
@@ -84,8 +86,9 @@ def main():
                 key_position = None  # Remove key from the map
 
         # Check if the NPC and player collide (Game Over)
-        distance = math.sqrt((player.x - npc.x) ** 2 + (player.y - npc.y) ** 2)
-        if distance < NPC_HITBOX_RADIUS:
+        distance1 = math.sqrt((player.x - npc_1.x) ** 2 + (player.y - npc_1.y) ** 2)
+        distance2 = math.sqrt((player.x - npc_2.x) ** 2 + (player.y - npc_2.y) ** 2)
+        if distance1 < NPC_HITBOX_RADIUS or distance2 < NPC_HITBOX_RADIUS:
             running = False
 
         # Camera follows player
@@ -100,7 +103,8 @@ def main():
         virtual_screen.blit(bg_image, (-camera_x, -camera_y))
         draw_maze(virtual_screen, maze, camera_x, camera_y)
         player.draw(virtual_screen, camera_x, camera_y)
-        npc.draw(virtual_screen, camera_x, camera_y)
+        npc_1.draw(virtual_screen, camera_x, camera_y)
+        npc_2.draw(virtual_screen, camera_x, camera_y)
 
         # Draw the key if it's still there
         if key_position:
