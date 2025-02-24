@@ -1,5 +1,6 @@
 import pygame
 import random
+from bilder import *
 from constants import *
 
 def create_maze():
@@ -45,6 +46,7 @@ def create_maze():
     return maze, (key_x, key_y)
 
 def draw_maze(screen, maze, camera_x, camera_y):
+    """
     for y in range(MAZE_HEIGHT):
         for x in range(MAZE_WIDTH):
             if maze[y][x] == 1:
@@ -53,3 +55,14 @@ def draw_maze(screen, maze, camera_x, camera_y):
             elif maze[y][x] == 2:
                 pygame.draw.rect(screen, RED, 
                     (x * CELL_SIZE - camera_x, y * CELL_SIZE - camera_y, CELL_SIZE, CELL_SIZE))
+
+    """
+    for y in range(MAZE_HEIGHT):
+        for x in range(MAZE_WIDTH):
+            if maze[y][x] == 1:
+                screen.blit(wall_texture, 
+                            (x * CELL_SIZE - camera_x, y * CELL_SIZE - camera_y))
+            elif maze[y][x] == 2:
+                pygame.draw.rect(screen, RED, 
+                    (x * CELL_SIZE - camera_x, y * CELL_SIZE - camera_y, CELL_SIZE, CELL_SIZE))
+
