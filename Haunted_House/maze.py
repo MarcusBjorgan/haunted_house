@@ -20,16 +20,34 @@ def create_maze():
                 maze[y][x + i] = 0
             else:
                 maze[y + i][x] = 0
-    
-    vegg(0, 60, MAZE_WIDTH, "x")
-    vegg(0, 90, MAZE_WIDTH, "x")
 
+    """
     for i in range(5):
         vegg(i*40, 0, 60, "y")
         create_door(18 + i*40, 60, 6, "x")
 
         vegg(i*40, 90, 60, "y")
         create_door(18 + i*40, 90, 6, "x")
+    """
+    vegg(0, (MAZE_HEIGHT-25)//2, MAZE_WIDTH, "x")
+    vegg(0, (MAZE_HEIGHT+25)//2, MAZE_WIDTH, "x")
+
+    vegg(0, (MAZE_HEIGHT-25)//4, 25, "x")
+    vegg(25, 0, (MAZE_HEIGHT-25)//2, "y")
+    create_door(25, (MAZE_HEIGHT-25)//8-2, 4, "y")
+    create_door(25, (MAZE_HEIGHT+25)//4-2, 4, "y")
+    create_door(26, (MAZE_HEIGHT-25)//2, 9, "x")
+    create_door(26, (MAZE_HEIGHT+25)//2, 9, "x")
+
+    vegg(35, 0, (MAZE_HEIGHT-25)//2, "y")
+    vegg(35, (MAZE_HEIGHT-25)//4-5, MAZE_WIDTH-35, "x")
+    vegg(35, (MAZE_HEIGHT-25)//4+5, MAZE_WIDTH-35, "x")
+    create_door(35, (MAZE_HEIGHT-25)//4-5, 10, "y")
+
+    vegg(MAZE_WIDTH//4, (MAZE_HEIGHT+25)//2, (MAZE_HEIGHT-25)//2+1, "y")
+    create_door(MAZE_WIDTH//4, MAZE_HEIGHT-((MAZE_HEIGHT - 25)//4) - 5, 10, "y")
+
+
 
     # Set endpoint
     maze[MAZE_HEIGHT - 10][MAZE_WIDTH - 10] = 2
