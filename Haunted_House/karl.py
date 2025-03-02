@@ -3,8 +3,8 @@ import pygame
 
 class Player:
     def __init__(self):
-        self.x = 20
-        self.y = 20
+        self.x = 20//CELL_SIZE
+        self.y = 20//CELL_SIZE
         self.diameter = CELL_SIZE*4
 
         self.image = pygame.image.load("Haunted_House/Assets/player.png").convert_alpha()
@@ -28,11 +28,3 @@ class Player:
             self.image, 
             (int(self.x * CELL_SIZE - camera_x), int(self.y * CELL_SIZE - camera_y))
         )
-        """
-        pygame.draw.circle(
-            screen,
-            GREEN,
-            (self.x * CELL_SIZE - camera_x + self.diameter, self.y * CELL_SIZE - camera_y + self.diameter),
-            self.diameter
-        )
-        """
