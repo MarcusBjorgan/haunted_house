@@ -43,13 +43,17 @@ def create_maze():
     vegg(35, (MAZE_HEIGHT-25)//4-5, MAZE_WIDTH-35, "x")
     vegg(35, (MAZE_HEIGHT-25)//4+5, MAZE_WIDTH-35, "x")
     create_door(35, (MAZE_HEIGHT-25)//4-5, 10, "y")
+    create_door(50, (MAZE_HEIGHT-25)//4-5, 10, "x")
+    create_door(50, (MAZE_HEIGHT-25)//4+5, 10, "x")
+
+
 
     vegg(MAZE_WIDTH//4, (MAZE_HEIGHT+25)//2, (MAZE_HEIGHT-25)//2+1, "y")
     create_door(MAZE_WIDTH//4, MAZE_HEIGHT-((MAZE_HEIGHT - 25)//4) - 5, 10, "y")
 
 
 
-    # Set endpoint
+    # Setter sluttpunkt
     maze[MAZE_HEIGHT - 10][MAZE_WIDTH - 10] = 2
 
     # **Plasser nøkkel på et tilfeldig sted (ikke en vegg)**
