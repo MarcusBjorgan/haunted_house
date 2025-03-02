@@ -7,10 +7,9 @@ class NPC:
         self.x = start_x  
         self.y = start_y
         self.diameter = CELL_SIZE*3
-        self.path = []  # Liste som lagrer veien NPC-en skal følge
-        self.frame_counter = 0  # Teller hvor mange frames som har gått
+        self.path = []  
+        self.frame_counter = 0  
 
-        # Load and scale the image
         self.image = pygame.image.load("Haunted_House/Assets/eye.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, (CELL_SIZE*3, CELL_SIZE*3))
 
