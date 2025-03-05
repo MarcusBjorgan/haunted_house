@@ -50,7 +50,7 @@ class NPC:
         self.frame_counter += 1
         self.speed = speed
 
-        if self.frame_counter % 10 == 0 or not self.path:
+        if self.frame_counter % 500 == 0 or not self.path:
             self.find_path(player, maze)  # Oppdaterer stien hver 20. frame
 
 
